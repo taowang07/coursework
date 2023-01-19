@@ -1,0 +1,234 @@
+---
+title: "report"
+author: "Tao Wang"
+date: "2023-01-09"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir= normalizePath('..'))
+```
+
+```{r ProjecTemplate, include=FALSE}
+library(ProjectTemplate)
+load.project()
+
+# Run code in analysis.R script
+source("src/analysis.R")
+
+```
+
+
+## Data cleaning
+
+Firstly we need to do data cleaning for the three datasets, checking the missing values for every column. This table is the summary of missing value in application checkpoints dataset.There is no missing value in the dataset.
+
+```{r echo=FALSE}
+
+knitr::kable(
+  a, 
+  caption = "Missing value in application checkpoints dataset "
+)
+
+```
+
+This table is the summary of missing value in gpu dataset.There is no missing value in the dataset.
+
+```{r echo=FALSE}
+
+knitr::kable(
+  a1, 
+  caption = "Missing value in gpu dataset "
+)
+
+```
+
+This table is the summary of missing value in task dataset.There is no missing value in the dataset.
+
+```{r echo=FALSE}
+
+knitr::kable(
+  a2, 
+  caption = "Missing value in task dataset "
+)
+
+```
+\newpage
+## Which event types dominate task runtimes?
+
+The table below shows sum of event type in total runtime,the number of starts and stops is equal throughout the total render process.
+
+```{r echo=FALSE}
+knitr::kable(
+  question1, 
+  caption = "Event type in total runtime ",
+ col.names=c("Event type", "Sum")
+)
+
+```
+
+The pie chart shows sum of event type in total runtime.
+
+```{r echo=FALSE}
+# Insert US plot
+bar_GB + coord_polar()+
+  ggtitle(" Event type in total runtime")
+
+```
+\newpage
+
+## What is the interplay between GPU temperature and performance?
+
+The following scatter plot shows the relationship between GPU power  and temperature.There is no  obvious linear relationship between GPU power and temperature.
+
+```{r echo=FALSE}
+# Insert US plot
+bar_GB1 +
+  ggtitle(" Relationship between GPU power and temperature")
+```
+
+The scatterplot matrix shows the relationship among GPU performance variables.There is no  obvious linear relationship among these variables.But for power and percent utilisation of  GPU memory, when percent utilisation of  GPU memory is above 30%, there is a slight linear relationship between it and GPU power.
+
+```{r echo=FALSE}
+# Insert US plot
+pairs(gpu[1:1000,5:8], main = "Relationship among GPU performance variables")
+```
+\newpage
+
+## Can we quantify the variation in computation requirements for particular tiles?
+
+The following table shows the TOP 10 sum of tiles, we randomly select three tiles as representatives.
+
+```{r echo=FALSE}
+knitr::kable(
+  df[1:10, ], 
+  caption = "TOP 10 sum of tiles ",
+ col.names=c("Tiles", "Sum")
+)
+
+```
+
+For these three tiles, the histogram below shows the  variation in percent utilisation of the GPU Core, data is mainly distributed at 0% and after 80%.For different tiles, percent utilisation of the GPU Core vary greatly.When percent utilisation of the GPU Core is near 85%, red tile's data is almost three times as big as blue tile's data.
+
+```{r echo=FALSE, message=FALSE}
+# Insert US plot
+bar_GB2+
+  ggtitle("Variation in percent utilisation of the GPU Core")
+```
+\newpage
+For these three tiles,the line chart below shows the  variation in percent utilisation of the GPU memory, data is mainly distributed at 0% and between 30% and  70%.For different tiles, there is no  obvious difference in percent utilisation of the GPU memory.
+
+```{r echo=FALSE, message=FALSE}
+# Insert US plot
+bar_GB3+
+  ggtitle("Variation in percent utilisation of the GPU memory")
+```
+\newpage
+
+## Can we identify particular GPU cards (based on their serial numbers) whose performance differs to other cards
+
+Now let's explore the relationship between GPU serial number and performance.
+
+The following scatter plot shows the relationship between GPU serial number and power.There is no obvious relationship between them.
+
+```{r echo=FALSE, message=FALSE}
+# Insert US plot
+bar_GB10+
+  ggtitle("Relationship between GPU serial number and power")
+```
+The following scatter plot shows the relationship between GPU serial number and percent utilisation of memory.There is no obvious relationship between them.
+
+```{r echo=FALSE, message=FALSE}
+# Insert US plot
+bar_GB11+
+  ggtitle("Relationship between GPU serial number and percent utilisation of memory")
+```
+
+The following scatter plot shows the relationship between GPU serial number and percent utilisation of core.There is no obvious relationship between them.
+
+```{r echo=FALSE, message=FALSE}
+# Insert US plot
+bar_GB12+
+  ggtitle("Relationship between GPU serial number and percent utilisation of core")
+```
+\newpage
+
+## What can we learn about the efficiency of the task scheduling process
+
+When it comes to the efficiency of the task scheduling process,we mainly explore variation in percent utilisation of the GPU Core and memory for all GPU cards. 
+
+For all GPU cards,the line chart below shows the  variation in percent utilisation of the GPU CORE, the data is mainly distributed at 0% and between 75% and  100%.
+
+```{r echo=FALSE, message=FALSE}
+# Insert US plot
+bar_GB4+
+  ggtitle("Variation in percent utilisation of the GPU CORE")
+```
+
+For all GPU cards,the line chart below shows the  variation in percent utilisation of the GPU memory, the data is mainly distributed at 0% and between 25% and 70%.
+
+```{r echo=FALSE, message=FALSE}
+# Insert US plot
+bar_GB5+
+  ggtitle("Variation in percent utilisation of the GPU memory")
+```
+
+The table below shows the sum of zoom levels. Level 12 accounts for the majority of the data set which is 65536, while level 8 and 4 only have 256 and 1 respectively.
+
+```{r echo=FALSE}
+knitr::kable(
+  df2, 
+  caption = "Sum of zoom levels ",
+ col.names=c("Zoom level", "Sum")
+)
+
+```
+
+The bar chart below shows the sum of zoom levels
+
+```{r echo=FALSE}
+# Insert US plot
+bar_GB6 + 
+  ggtitle("Sum of zoom levels")
+
+```
+
+Now let's look at the distribution of GPU power draw  in each event  within the rendering application.
+
+The boxplot below shows GPU power draw in five different events.Power distribution is basically consistent.First quartile is about 50 watt,Median is about 100 Watt,Third quartile is about 125 Watt.
+
+```{r echo=FALSE}
+# Insert US plot
+bar_GB7 + 
+  ggtitle("GPU power draw  in each event")
+
+```
+
+The table below shows average performance parameters in five different events.For these four parameters, the average performance data is almost equal.
+
+```{r echo=FALSE}
+knitr::kable(
+  df4, 
+  caption = "Event type in total runtime ",
+)
+
+```
+
+The density diagram below shows the power distribution in different events.Power distribution is basically consistent,in each event, the most commonly used power is below 50.
+
+```{r echo=FALSE}
+# Insert US plot
+bar_GB8 + 
+  ggtitle("Power distribution in different events")
+
+```
+
+The density diagram below shows the percent utilisation of  GPU Core distribution in different events.Percent utilisation of  GPU Core distribution is basically consistent,in each event, the most common percent utilisation  is between 75% and 100%. For render and total render event, Percent utilisation of start type is slightly higher than stop type.
+
+```{r echo=FALSE}
+# Insert US plot
+bar_GB9 + 
+  ggtitle("Percent utilisation of GPU Core distribution in different events")
+
+```
